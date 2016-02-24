@@ -1,0 +1,85 @@
+<head>
+  <script src="https://fb.me/react-0.14.3.js"></script>
+  <script src="https://fb.me/react-dom-0.14.3.js"></script>
+  <script src="https://fb.me/JSXTransformer-0.12.2.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+</head>
+<body>
+  <div class='container'>
+     <div class='row'>
+      <div class='col-sm-5 target'>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+<script type="text/jsx">
+  // 1. define a react component class; must always have a render method that returns jsx
+  var Badge = React.createClass({
+    render: function(){
+      return (
+        <button className="btn btn-primary" type="button">
+          {this.props.title} <span className="badge">{this.props.number}</span>
+        </button>
+      );
+    }
+  });
+
+  var Thumbnail = React.createClass({
+    render: function(){
+      return (
+        <div className="thumbnail">
+          <img src={ this.props.imageUrl }/>
+          <div className="caption">
+            <h3>{ this.props.header }</h3>
+            <p>{ this.props.description }</p>
+            <p>
+              <Badge title={this.props.title} number={this.props.number}/>
+            </p>
+          </div>
+        </div>
+      );
+    }
+  });
+
+  var ThumbnailList = React.createClass({
+    render: function(){
+      var list = this.props.thumbnailData.map(function(thumbnailProps, i){
+        return (
+          <Thumbnail {...thumbnailProps} key={i}/>
+        );
+      });
+      return (
+        <div>
+          { list }
+        </div>
+      );
+    }
+  });
+
+  // 2. ask react to render this class; createElement instantiates the Badge class
+  // props are the 2nd arg
+  var options = {
+    thumbnailData: [{
+      title: "See tutorials",
+      number: 32,
+      header: 'Learn React',
+      description: 'This is a description',
+      imageUrl: 'http://formatjs.io/img/react.svg'
+    },
+    {
+      title: "See tutorials",
+      number: 1,
+      header: 'Learn Gulp',
+      description: 'This is a description of Gulp!',
+      imageUrl: 'https://raw.githubusercontent.com/gulpjs/artwork/master/gulp-2x.png'
+    }]
+  };
+  var element = React.createElement(ThumbnailList, options);
+
+  // 3. when we ask react to render this class, we will tell it where to
+  // place the rendered element in the dom
+  // ReactDOM.render() takes instantiated element, and location to append in DOM
+  ReactDOM.render(element, document.querySelector('.target'));
+</script>
